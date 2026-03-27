@@ -1,33 +1,38 @@
-# MQTT topics
+# MQTT topics (canonical, MVP)
+
+Этот файл — **источник истины** для MQTT namespace и payload naming.
+Используйте его как reference для firmware bridge, backend, frontend и examples.
 
 ## Namespace
 
-Используем префикс:
-- `brio/`
-
-Node id пример:
-- `node-01`
+- Базовый префикс: `brio/v1`
+- Идентификатор узла в topic: `nodeId` (например `node-1`)
+- Идентификаторы сущностей:
+  - `readerId` (например `reader-a`)
+  - `switchId` (например `sw-1`)
+  - `trainId` (например `train-1`, используется в registry/rules)
 
 ## Topics (MVP)
 
-- `brio/node/node-01/heartbeat`
-- `brio/node/node-01/event/rfid`
-- `brio/node/node-01/state/switch/1`
-- `brio/node/node-01/state/switch/2`
-- `brio/node/node-01/cmd/switch/1`
-- `brio/node/node-01/cmd/switch/2`
+- Heartbeat from node:
+  - `brio/v1/nodes/{nodeId}/heartbeat`
+- RFID event from node:
+  - `brio/v1/nodes/{nodeId}/events/rfid.detected`
+- Switch state ack from node:
+  - `brio/v1/nodes/{nodeId}/state/switch`
+- Switch command to node:
+  - `brio/v1/nodes/{nodeId}/commands/switch.set`
 
-## Payload examples
+## Payloads (MVP)
 
 ### heartbeat
 
 ```json
 {
-  "nodeId": "node-01",
-  "ts": 1710000000,
-  "uptimeMs": 123456,
-  "transport": "usb-serial",
-  "fw": "pico2w-mvp-0.1"
+  "nodeId": "node-1",
+  "status": "ONLINE",
+  "uptimeSec": 1234,
+  "ts": "2026-03-27T12:00:00Z"
 }
 ```
 
@@ -35,10 +40,11 @@ Node id пример:
 
 ```json
 {
-  "nodeId": "node-01",
-  "readerId": "reader-1",
-  "uid": "04A1B2C3",
-  "ts": 1710000001
+  "eventId": "evt-001",
+  "nodeId": "node-1",
+  "readerId": "reader-a",
+  "tagUid": "04AABBCCDD",
+  "ts": "2026-03-27T12:00:01Z"
 }
 ```
 
@@ -46,18 +52,34 @@ Node id пример:
 
 ```json
 {
-  "cmdId": "cmd-1001",
-  "position": "STRAIGHT"
+  "commandId": "cmd-001",
+  "nodeId": "node-1",
+  "switchId": "sw-1",
+  "targetState": "DIVERGE",
+  "reason": "manual-api",
+  "ts": "2026-03-27T12:00:02Z"
 }
 ```
 
-## Data flow
+### switch state ack
+
+```json
+{
+  "nodeId": "node-1",
+  "switchId": "sw-1",
+  "state": "DIVERGE",
+  "source": "COMMAND",
+  "ts": "2026-03-27T12:00:03Z"
+}
+```
+
+## Data flow (MVP)
 
 ```mermaid
 flowchart LR
-  P[Pico 2 W\nUSB Serial] --> B[Bridge on Raspberry Pi]
+  P[Pico 2 W / Pico 2 WH\nUSB Serial node] --> B[Serial↔MQTT bridge on Raspberry Pi]
   B --> M[(Mosquitto)]
-  M --> S[Spring Boot]
+  M --> S[Spring Boot backend]
   S --> U[Web UI]
   U --> S
   S --> M
@@ -67,4 +89,5 @@ flowchart LR
 
 ## Future mode
 
-В future mode Pico 2 W может публиковать/подписываться в MQTT напрямую по Wi‑Fi, но topic schema сохраняется.
+В future mode Pico 2 W может публиковать/подписываться в MQTT напрямую по Wi‑Fi.
+**Topic schema и payload naming должны оставаться теми же.**

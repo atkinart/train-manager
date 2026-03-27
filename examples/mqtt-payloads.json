@@ -22,6 +22,7 @@
     "topic": "brio/v1/nodes/node-1/commands/switch.set",
     "payload": {
       "commandId": "cmd-001",
+      "nodeId": "node-1",
       "switchId": "sw-1",
       "targetState": "DIVERGE",
       "reason": "rule:route-a",

@@ -2,14 +2,27 @@
   "nodes": [
     {
       "nodeId": "node-1",
-      "type": "ARDUINO",
+      "type": "PICO2W_USB_SERIAL",
       "firmwareVersion": "0.1.0",
-      "readerIds": ["reader-a"],
-      "switchIds": ["sw-1", "sw-2"]
+      "readerIds": [
+        "reader-a"
+      ],
+      "switchIds": [
+        "sw-1",
+        "sw-2"
+      ]
     }
   ],
   "trains": [
-    { "trainId": "train-1", "tagUid": "04AABBCCDD", "displayName": "Cargo Blue" },
-    { "trainId": "train-2", "tagUid": "0400112233", "displayName": "Passenger Red" }
+    {
+      "trainId": "train-1",
+      "tagUid": "04AABBCCDD",
+      "displayName": "Cargo Blue"
+    },
+    {
+      "trainId": "train-2",
+      "tagUid": "0400112233",
+      "displayName": "Passenger Red"
+    }
   ]
 }

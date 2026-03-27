@@ -25,6 +25,7 @@ public class ManualControlService {
     public SwitchCommand setSwitch(String nodeId, String switchId, SwitchState targetState) {
         SwitchCommand command = new SwitchCommand(
                 UUID.randomUUID().toString(),
+                nodeId,
                 switchId,
                 targetState,
                 "manual-api",

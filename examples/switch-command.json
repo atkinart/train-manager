@@ -1,5 +1,6 @@
 {
   "commandId": "cmd-1024",
+  "nodeId": "node-1",
   "switchId": "sw-1",
   "targetState": "DIVERGE",
   "reason": "rule:reader-a-tag-04AABBCCDD",

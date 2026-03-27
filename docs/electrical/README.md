@@ -19,3 +19,9 @@
 2. Servo: отдельный 5V PSU.
 3. Всегда COMMON GND.
 4. MVP transport: USB Serial Pico ↔ Raspberry Pi.
+
+
+## Legacy files
+
+- `arduino-rpi-connection.md` и `diagrams/arduino-rpi-serial.*` оставлены только как historical reference.
+- Для текущего проекта используйте `pico-rpi-connection.md` и `diagrams/pico-rpi-serial.svg`.

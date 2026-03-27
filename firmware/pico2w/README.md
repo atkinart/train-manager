@@ -4,7 +4,14 @@
 
 - Board: Raspberry Pi Pico 2 W / Pico 2 WH
 - MVP transport: USB Serial to Raspberry Pi
-- Peripherals: MFRC522 (SPI), 2x servo (PWM)
+- Peripherals: MFRC522 (SPI), 2x servo (PWM signal)
+
+## Safety invariants (must keep)
+
+- Pico GPIO = 3.3V logic only.
+- Never apply 5V logic to Pico GPIO.
+- Servo are powered by external 5V PSU.
+- COMMON GND is mandatory (Pico + MFRC522 + servo PSU).
 
 ## Development modes
 
@@ -32,3 +39,12 @@
 - RFID scan,
 - duplicate tag suppression window,
 - command handling for 2 switches.
+
+## Naming alignment
+
+Для совместимости с backend/docs/examples используйте:
+- `nodeId`: `node-1`
+- `readerId`: `reader-a`
+- `switchId`: `sw-1`, `sw-2`
+
+MQTT naming и payload schema описаны в `docs/mqtt-topics.md`.
