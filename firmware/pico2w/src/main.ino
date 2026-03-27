@@ -60,7 +60,7 @@ void setup() {
   transport.begin(kBaud);
   rfid.begin();
   servo.begin();
-  transport.sendLine("BOOT node=node-01 platform=pico2w transport=usb-serial");
+  transport.sendLine("BOOT node=node-1 platform=pico2w transport=usb-serial");
 }
 
 void loop() {
@@ -68,7 +68,7 @@ void loop() {
 
   if (now - last_heartbeat_ms >= kHeartbeatEveryMs) {
     last_heartbeat_ms = now;
-    transport.sendLine("HEARTBEAT node=node-01");
+    transport.sendLine("HEARTBEAT node=node-1");
   }
 
   RfidEvent event;

@@ -4,9 +4,9 @@
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="a1" value="Pico 2 W/2 WH\nSPI BUS\nPOWER 3.3V\nservo signal D5/D6\nCOMMON GND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#1d4ed8;fontSize=16;" vertex="1" parent="1"><mxGeometry x="60" y="120" width="360" height="220" as="geometry"/></mxCell>
+        <mxCell id="a1" value="Pico 2 W/2 WH\nSPI BUS\nPOWER 3.3V\nservo signal GP14/GP15\nCOMMON GND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#1d4ed8;fontSize=16;" vertex="1" parent="1"><mxGeometry x="60" y="120" width="360" height="220" as="geometry"/></mxCell>
         <mxCell id="a2" value="MFRC522\nPOWER 3.3V\nSPI BUS\nCOMMON GND\nWARNING: no 5V" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#15803d;fontSize=16;" vertex="1" parent="1"><mxGeometry x="520" y="120" width="320" height="220" as="geometry"/></mxCell>
-        <mxCell id="a3" value="Raspberry Pi\nUSB SERIAL\nOwn PSU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontSize=16;" vertex="1" parent="1"><mxGeometry x="980" y="120" width="320" height="170" as="geometry"/></mxCell>
+        <mxCell id="a3" value="Raspberry Pi\nUSB Serial\nOwn PSU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontSize=16;" vertex="1" parent="1"><mxGeometry x="980" y="120" width="320" height="170" as="geometry"/></mxCell>
         <mxCell id="a4" value="External 5V PSU for servo\nPOWER 5V\nCOMMON GND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#a16207;fontSize=16;" vertex="1" parent="1"><mxGeometry x="60" y="470" width="360" height="170" as="geometry"/></mxCell>
         <mxCell id="a5" value="Servo #1\nPOWER 5V + GND\nservo signal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#c2410c;fontSize=16;" vertex="1" parent="1"><mxGeometry x="520" y="470" width="320" height="150" as="geometry"/></mxCell>
         <mxCell id="a6" value="Servo #2\nPOWER 5V + GND\nservo signal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#c2410c;fontSize=16;" vertex="1" parent="1"><mxGeometry x="980" y="470" width="320" height="150" as="geometry"/></mxCell>

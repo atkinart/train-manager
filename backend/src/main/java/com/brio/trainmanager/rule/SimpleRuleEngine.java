@@ -15,6 +15,7 @@ public class SimpleRuleEngine {
         if ("reader-a".equals(event.readerId()) && "04AABBCCDD".equalsIgnoreCase(event.tagUid())) {
             return Optional.of(new SwitchCommand(
                     UUID.randomUUID().toString(),
+                    event.nodeId(),
                     "sw-1",
                     SwitchState.DIVERGE,
                     "rule:reader-a-tag-04AABBCCDD",
