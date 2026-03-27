@@ -1,0 +1,7 @@
+{
+  "commandId": "cmd-1024",
+  "switchId": "sw-1",
+  "targetState": "DIVERGE",
+  "reason": "rule:reader-a-tag-04AABBCCDD",
+  "ts": "2026-03-27T12:01:10Z"
+}

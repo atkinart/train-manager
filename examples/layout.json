@@ -1,0 +1,21 @@
+{
+  "layoutId": "layout-main",
+  "nodes": [
+    {
+      "id": "node-1",
+      "readers": ["reader-a"],
+      "switches": ["sw-1", "sw-2"]
+    }
+  ],
+  "readers": [
+    { "id": "reader-a", "markerId": "marker-a", "blockSectionId": "block-1" }
+  ],
+  "switches": [
+    { "id": "sw-1", "states": ["STRAIGHT", "DIVERGE"] },
+    { "id": "sw-2", "states": ["STRAIGHT", "DIVERGE"] }
+  ],
+  "blocks": [
+    { "id": "block-1", "next": ["block-2"] },
+    { "id": "block-2", "next": [] }
+  ]
+}

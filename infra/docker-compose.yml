@@ -1,0 +1,43 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: train-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h localhost -t '$SYS/broker/version' -C 1 -W 3 >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: gradle:8.10-jdk21
+    container_name: train-backend
+    working_dir: /app
+    command: ["gradle", "bootRun", "--no-daemon"]
+    volumes:
+      - ../backend:/app
+    environment:
+      - MQTT_BROKER_URL=tcp://mosquitto:1883
+    ports:
+      - "8080:8080"
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+
+  frontend:
+    image: node:20-alpine
+    container_name: train-frontend
+    working_dir: /app
+    command: ["sh", "-c", "npm install && npm run dev"]
+    volumes:
+      - ../frontend:/app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend

@@ -1,0 +1,41 @@
+{
+  "heartbeat": {
+    "topic": "brio/v1/nodes/node-1/heartbeat",
+    "payload": {
+      "nodeId": "node-1",
+      "status": "ONLINE",
+      "uptimeSec": 1234,
+      "ts": "2026-03-27T12:00:00Z"
+    }
+  },
+  "rfidDetected": {
+    "topic": "brio/v1/nodes/node-1/events/rfid.detected",
+    "payload": {
+      "eventId": "evt-001",
+      "nodeId": "node-1",
+      "readerId": "reader-a",
+      "tagUid": "04AABBCCDD",
+      "ts": "2026-03-27T12:00:01Z"
+    }
+  },
+  "switchCommand": {
+    "topic": "brio/v1/nodes/node-1/commands/switch.set",
+    "payload": {
+      "commandId": "cmd-001",
+      "switchId": "sw-1",
+      "targetState": "DIVERGE",
+      "reason": "rule:route-a",
+      "ts": "2026-03-27T12:00:02Z"
+    }
+  },
+  "switchStateAck": {
+    "topic": "brio/v1/nodes/node-1/state/switch",
+    "payload": {
+      "nodeId": "node-1",
+      "switchId": "sw-1",
+      "state": "DIVERGE",
+      "source": "COMMAND",
+      "ts": "2026-03-27T12:00:03Z"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "rule-route-a",
+    "enabled": true,
+    "when": {
+      "eventType": "RFID_DETECTED",
+      "readerId": "reader-a",
+      "tagUidIn": ["04AABBCCDD"]
+    },
+    "then": [
+      {
+        "action": "SET_SWITCH",
+        "switchId": "sw-1",
+        "targetState": "DIVERGE"
+      }
+    ],
+    "cooldownMs": 1000,
+    "priority": 100
+  }
+]

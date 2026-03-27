@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: train-manager-backend
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+mqtt:
+  broker-url: ${MQTT_BROKER_URL:tcp://mosquitto:1883}
+  client-id: train-manager-backend
+  username:
+  password:
+  topics:
+    heartbeat: brio/v1/nodes/+/heartbeat
+    rfid-detected: brio/v1/nodes/+/events/rfid.detected
+    switch-state: brio/v1/nodes/+/state/switch
+    switch-command-template: brio/v1/nodes/%s/commands/switch.set
