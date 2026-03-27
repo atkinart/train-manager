@@ -1,23 +1,26 @@
 # Roadmap
 
-## Version 1 (MVP)
-- 1 node, 1-2 readers, 2 switches.
-- RFID event -> rule -> switch command -> state ack.
-- UI: status + event log + manual switch.
+## Now (MVP)
 
-## Version 2
-- Несколько node.
-- Persistent event storage.
-- Расширенный rule DSL + тестовые профили маршрутов.
-- Улучшенный layout view.
+- Pico 2 W primary node controller
+- 1x MFRC522
+- 2x servo
+- USB Serial to Raspberry Pi
+- MQTT через Mosquitto на Raspberry Pi
 
-## Version 3
-- Block sections occupancy.
-- Светофоры и шлагбаумы.
-- Улучшенная надёжность (retries, idempotency).
-- Role-based access и audit log.
+## Next
 
-## Дальнейшее расширение
-- Параллельная система управления поездами (out of current scope).
-- Полуавтономное расписание маршрутов.
-- Digital twin с визуальным проигрыванием событий.
+- второй MFRC522 на том же узле,
+- стабильный command/ack контракт,
+- конфигурация узла из файла.
+
+## Later
+
+- direct Wi‑Fi MQTT mode для Pico 2 W,
+- несколько узлов Pico,
+- PCA9685,
+- расширенные правила маршрутизации.
+
+## Legacy note
+
+Arduino-ветка остаётся только как альтернативная/историческая и не является основной дорожной картой.

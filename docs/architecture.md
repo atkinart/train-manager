@@ -1,119 +1,67 @@
 # Architecture
 
-## 1. Общая идея
+## 1) High-level view
 
-Система строится как event-driven pipeline:
-- полевые узлы публикуют факты (`events`);
-- backend вычисляет решение (`rules`);
-- backend публикует управленческие команды (`commands`);
-- полевые узлы публикуют подтверждение состояния (`state`).
+Проект разделён на 4 уровня:
 
-## 2. Роли компонентов
-
-- **Arduino Node**: работа с RFID/servo, heartbeat, MQTT I/O.
-- **Mosquitto**: транспорт событий/команд.
-- **Spring Boot Backend**:
-  - нормализация сообщений;
-  - хранение текущего состояния;
-  - применение правил;
-  - API + live updates для UI.
-- **Web UI**: наблюдение и ручные действия оператора.
-
-## 3. Компонентная диаграмма
+- **Node controller**: Raspberry Pi Pico 2 W / Pico 2 WH.
+- **Hub**: Raspberry Pi с Mosquitto и serial↔MQTT bridge.
+- **Backend**: Java + Spring Boot.
+- **Frontend**: JS web UI.
 
 ```mermaid
 flowchart LR
-  subgraph Field[Field level]
-    A1[Arduino Node]
-    R1[MFRC522 Reader]
-    S1[Servo Switch]
-    A1 --> R1
-    A1 --> S1
-  end
+    subgraph Node[Node (MVP)]
+      P[Pico 2 W / Pico 2 WH\n3.3V logic]
+      R[MFRC522 RFID\nSPI]
+      S[2x Servo\nPWM signals]
+      PS[External 5V PSU\nservo power]
+      P --- R
+      P --- S
+      PS --- S
+      PS --- P
+    end
 
-  subgraph Core[Central level]
-    M[(Mosquitto)]
-    B[Spring Boot Backend]
-    DB[(In-memory MVP\nFuture: PostgreSQL)]
-    B --> DB
-  end
-
-  subgraph UI[UI level]
-    W[Web UI]
-  end
-
-  A1 <-- MQTT --> M
-  B <-- MQTT --> M
-  W <-- REST/SSE --> B
+    P -->|USB Serial| PI[Raspberry Pi]
+    PI -->|MQTT| MQ[(Mosquitto)]
+    MQ --> BE[Spring Boot]
+    BE --> FE[Web UI]
 ```
 
-## 4. Sequence: поезд прошёл reader -> переключилась стрелка
+## 2) MVP vs Future
 
-```mermaid
-sequenceDiagram
-  participant T as Train(Tag)
-  participant N as Arduino Node
-  participant MQ as Mosquitto
-  participant BE as Backend
-  participant UI as Web UI
+### MVP (по умолчанию)
 
-  T->>N: RFID tag detected
-  N->>MQ: publish rfid.detected
-  MQ->>BE: deliver event
-  BE->>BE: apply rule
-  BE->>MQ: publish switch.command
-  MQ->>N: deliver command
-  N->>N: servo move
-  N->>MQ: publish switch.state
-  MQ->>BE: deliver state ack
-  BE->>UI: SSE state update
-```
+- Pico 2 W/Pico 2 WH
+- 1–2x MFRC522
+- 2x servo
+- USB Serial Pico ↔ Raspberry Pi
+- MQTT через bridge на Raspberry Pi
 
-## 5. Deployment diagram
+### Future
 
-```mermaid
-flowchart TB
-  subgraph Pi[Raspberry Pi / mini PC]
-    M[mosquitto container]
-    B[backend container]
-    F[frontend container]
-  end
+- прямой Wi‑Fi MQTT с Pico 2 W,
+- много узлов Pico,
+- PCA9685 для большого количества servo,
+- блок-участки, сигналы, шлагбаумы.
 
-  subgraph Rail[Railway Layout]
-    N1[Arduino node-1]
-    N2[Arduino node-2 future]
-  end
+## 3) Node firmware responsibilities
 
-  Laptop[Operator browser]
+- heartbeat,
+- RFID scan + подавление дублей,
+- управление servo,
+- serial transport protocol (MVP),
+- command handler.
 
-  N1 <-- Wi-Fi/Ethernet --> M
-  N2 <-- Wi-Fi/Ethernet --> M
-  B <-- local docker net --> M
-  F <-- HTTP --> B
-  Laptop --> F
-```
+## 4) Electrical architecture rules
 
-## 6. Границы ответственности
+- Pico GPIO: **только 3.3V логика**.
+- MFRC522 питать от 3.3V.
+- Servo питать от отдельного 5V PSU.
+- Обязательный **COMMON GND**.
+- Нельзя подавать 5V сигналы на GPIO Pico.
 
-### Arduino
-- Debounce/anti-duplicate RFID чтений.
-- Исполнение servo-команды.
-- Низкоуровневая диагностика (RSSI-like данные, uptime, errors).
+## 5) Platform policy
 
-### Backend
-- Каноническая модель layout и устройств.
-- Rule evaluation (stateless/stateful).
-- Источник истины по текущему состоянию.
-- API для UI и внешних интеграций.
-
-### UI
-- Визуализация состояния.
-- Журнал событий.
-- Manual override (подтверждённые команды).
-
-## 7. Масштабирование
-
-- Topic naming включает `nodeId`, `readerId`, `switchId`.
-- Node горизонтально добавляются без изменения протокола.
-- Rule engine отделён от транспорта, можно заменить реализацию.
-- In-memory storage в MVP заменяется на БД без изменения API контрактов.
+- **Primary target**: Pico 2 W / Pico 2 WH.
+- Arduino: только legacy/alternative compatibility path.

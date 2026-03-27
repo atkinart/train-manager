@@ -1,35 +1,43 @@
-# Debugging Guide
+# Debugging guide
 
-## Порядок отладки (обязательно)
+## 0) Порядок отладки (обязательный)
 
-1. **Reader отдельно**: убедиться, что UID читается стабильно в Serial.
-2. **Servo отдельно**: проверить крайние положения и отсутствие reset.
-3. **MQTT отдельно**: heartbeat publish/subscribe без бизнес-логики.
-4. **Backend**: приём события и расчёт команды.
-5. **UI**: отображение live state.
+1. Питание и земля.
+2. RFID.
+3. Servo.
+4. USB serial.
+5. MQTT bridge.
 
-## Быстрые проверки
+## 1) Частые проблемы
 
-### MQTT
-```bash
-mosquitto_sub -h localhost -t 'brio/v1/#' -v
-```
+### Проблема: Pico зависает/перезапускается при движении servo
 
-### Backend state
-```bash
-curl http://localhost:8080/api/v1/state
-```
+Обычно причина: servo питаются не от отдельного 5V PSU или нет COMMON GND.
 
-## Таблица типовых проблем
+### Проблема: MFRC522 не видит метки
 
-| Проблема | Где искать | Действие |
-|---|---|---|
-| Нет heartbeat | Wi-Fi/MQTT creds | проверить broker host/port/clientId |
-| Есть heartbeat, нет RFID events | wiring SPI/питание 3.3V | сверить пины и питание reader |
-| Команда есть, стрелка не двигается | servo power | отдельный 5V БП + общая земля |
-| UI пустой | SSE/REST CORS | проверить `/api/v1/events/stream` и CORS |
-| Дубли RFID событий | нет anti-duplicate окна | включить фильтр повторов в node |
+Проверьте:
+- питание reader на 3.3V,
+- SPI pin mapping,
+- длину проводов (держать короткими),
+- общий GND.
 
-## Практический совет
+### Проблема: нет данных на Raspberry Pi
 
-На каждом шаге фиксируйте эталонный лог успешного запуска — это ускоряет диагностику регрессий.
+Проверьте:
+- data USB cable,
+- serial device на Pi,
+- скорость порта,
+- формат строк протокола.
+
+## 2) Быстрые sanity checks
+
+- Heartbeat идёт каждые N секунд.
+- Одна и та же метка не спамит событиями (duplicate suppression).
+- Команда на стрелку меняет state и приходит ack.
+
+## 3) Логи
+
+- firmware: serial debug output,
+- bridge: parse/forward logs,
+- backend: MQTT consume/produce logs.

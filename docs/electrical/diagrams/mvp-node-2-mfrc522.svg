@@ -1,36 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="840" viewBox="0 0 1600 840">
-  <rect width="1600" height="840" fill="#f8fafc"/>
-  <text x="40" y="55" font-size="34" font-family="Arial" font-weight="700">MVP wiring with 2x MFRC522 on one Arduino</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="860" viewBox="0 0 1300 860">
+  <rect width="1300" height="860" fill="#f8fafc"/>
+  <text x="35" y="52" font-size="34" font-family="Arial" font-weight="700">MVP wiring with 2x MFRC522 on Pico 2 W</text>
 
-  <rect x="70" y="150" width="420" height="260" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
-  <text x="100" y="200" font-size="30" font-family="Arial" font-weight="700">Arduino UNO R4</text>
-  <text x="100" y="245" font-size="24" font-family="Arial">SPI BUS shared: D13/D11/D12</text>
-  <text x="100" y="280" font-size="24" font-family="Arial">CS1=D10, CS2=D8</text>
-  <text x="100" y="315" font-size="24" font-family="Arial">RST shared: D9</text>
+  <rect x="80" y="140" width="360" height="230" rx="16" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="110" y="195" font-size="30" font-family="Arial" font-weight="700">Pico 2 W</text>
+  <text x="110" y="235" font-size="22" font-family="Arial">SPI shared: GP18/19/16</text>
+  <text x="110" y="270" font-size="22" font-family="Arial">CS1: GP17, CS2: GP21</text>
+  <text x="110" y="305" font-size="22" font-family="Arial">RST: GP20 (shared)</text>
 
-  <rect x="610" y="120" width="390" height="250" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
-  <text x="640" y="170" font-size="30" font-family="Arial" font-weight="700">MFRC522 #1</text>
-  <text x="640" y="210" font-size="24" font-family="Arial">POWER 3.3V</text>
-  <text x="640" y="245" font-size="24" font-family="Arial">SPI BUS + CS=D10</text>
+  <rect x="560" y="130" width="280" height="170" rx="16" fill="#dcfce7" stroke="#166534" stroke-width="3"/>
+  <text x="620" y="200" font-size="28" font-family="Arial" font-weight="700">MFRC522 #1</text>
 
-  <rect x="1080" y="120" width="390" height="250" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
-  <text x="1110" y="170" font-size="30" font-family="Arial" font-weight="700">MFRC522 #2</text>
-  <text x="1110" y="210" font-size="24" font-family="Arial">POWER 3.3V</text>
-  <text x="1110" y="245" font-size="24" font-family="Arial">SPI BUS + CS=D8</text>
+  <rect x="560" y="360" width="280" height="170" rx="16" fill="#dcfce7" stroke="#166534" stroke-width="3"/>
+  <text x="620" y="430" font-size="28" font-family="Arial" font-weight="700">MFRC522 #2</text>
 
-  <line x1="490" y1="245" x2="610" y2="245" stroke="#0f766e" stroke-width="5"/>
-  <line x1="490" y1="275" x2="1080" y2="275" stroke="#0f766e" stroke-width="5"/>
-  <text x="700" y="300" font-size="20" font-family="Arial" font-weight="700">SPI BUS (shared)</text>
+  <line x1="440" y1="210" x2="560" y2="210" stroke="#111827" stroke-width="4"/>
+  <line x1="440" y1="240" x2="560" y2="240" stroke="#111827" stroke-width="4"/>
+  <line x1="440" y1="270" x2="560" y2="270" stroke="#111827" stroke-width="4"/>
+  <text x="450" y="198" font-size="17" font-family="Arial">SCK/MOSI/MISO</text>
 
-  <line x1="490" y1="335" x2="610" y2="335" stroke="#7c3aed" stroke-width="5"/>
-  <line x1="490" y1="355" x2="1080" y2="355" stroke="#7c3aed" stroke-width="5"/>
-  <text x="700" y="380" font-size="20" font-family="Arial">POWER 3.3V + RST</text>
+  <line x1="440" y1="285" x2="560" y2="180" stroke="#0ea5e9" stroke-width="4"/>
+  <text x="455" y="300" font-size="17" font-family="Arial" fill="#0369a1">CS1</text>
 
-  <line x1="300" y1="410" x2="300" y2="760" stroke="#111827" stroke-width="6"/>
-  <line x1="300" y1="760" x2="1420" y2="760" stroke="#111827" stroke-width="6"/>
-  <line x1="800" y1="370" x2="800" y2="760" stroke="#111827" stroke-width="6"/>
-  <line x1="1270" y1="370" x2="1270" y2="760" stroke="#111827" stroke-width="6"/>
-  <text x="700" y="745" font-size="28" font-family="Arial" font-weight="700">COMMON GND</text>
+  <line x1="440" y1="320" x2="560" y2="445" stroke="#0ea5e9" stroke-width="4"/>
+  <text x="450" y="350" font-size="17" font-family="Arial" fill="#0369a1">CS2</text>
 
-  <text x="70" y="810" font-size="24" font-family="Arial" fill="#b91c1c" font-weight="700">WARNING: keep SPI wires short and keep both readers physically close to Arduino.</text>
+  <line x1="440" y1="335" x2="560" y2="255" stroke="#7c3aed" stroke-width="4"/>
+  <line x1="440" y1="335" x2="560" y2="485" stroke="#7c3aed" stroke-width="4"/>
+  <text x="450" y="370" font-size="17" font-family="Arial" fill="#6d28d9">RST shared</text>
+
+  <text x="70" y="780" font-size="24" font-family="Arial" fill="#b91c1c" font-weight="700">WARNING: keep SPI wires short and keep readers close to Pico.</text>
 </svg>

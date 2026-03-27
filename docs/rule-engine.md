@@ -1,46 +1,23 @@
-# Rule Engine
+# Rule engine
 
 ## Цель
 
-Преобразовать входные события в команды управления стрелками.
+Преобразовывать RFID события в команды стрелок безопасно и предсказуемо.
 
-## Модель правила (JSON DSL)
+## MVP rule pattern
 
-```json
-{
-  "id": "rule-route-a",
-  "enabled": true,
-  "when": {
-    "eventType": "RFID_DETECTED",
-    "readerId": "reader-a",
-    "tagUidIn": ["04AABBCCDD", "0400112233"]
-  },
-  "then": [
-    {
-      "action": "SET_SWITCH",
-      "switchId": "sw-1",
-      "targetState": "DIVERGE"
-    }
-  ],
-  "cooldownMs": 1000,
-  "priority": 100
-}
-```
+1. Вход: `event/rfid`.
+2. Lookup правил по `(nodeId, readerId, uid)`.
+3. Выход: команда `cmd/switch/{id}`.
+4. Ожидание `state/ack`.
 
-## Принципы принятия решения
+## Fail-safe
 
-1. Фильтр правил по `eventType`.
-2. Проверка условий (`readerId`, `tagUid`, future: block occupancy).
-3. Сортировка по `priority`.
-4. Применение `cooldownMs`.
-5. Публикация команд в MQTT.
+- timeout на подтверждение,
+- ограничение частоты команд,
+- идемпотентность через `cmdId`.
 
-## Базовое правило MVP
+## Platform assumption
 
-- Если `reader-a` видит тег `04AABBCCDD`, то `sw-1` -> `DIVERGE`.
-
-## Эволюция
-
-- Поддержка цепочек условий (`AND/OR`).
-- Поддержка временных окон и состояния участков.
-- Конфликт-резолвер для нескольких правил на одну стрелку.
+Node runtime в MVP — Pico 2 W через USB Serial bridge.
+Future runtime — Pico 2 W direct MQTT over Wi‑Fi.
