@@ -11,21 +11,21 @@
 
 ```mermaid
 flowchart LR
-    subgraph Node[Node (MVP)]
-      P[Pico 2 W / Pico 2 WH\n3.3V logic]
-      R[MFRC522 RFID\nSPI]
-      S[2x Servo\nPWM signals]
-      PS[External 5V PSU\nservo power]
+    subgraph Node["Node MVP"]
+      P["Pico 2 W / Pico 2 WH<br/>3.3V logic"]
+      R["MFRC522 RFID<br/>SPI"]
+      S["2x Servo<br/>PWM signals"]
+      PS["External 5V PSU<br/>servo power"]
       P --- R
       P --- S
       PS --- S
       PS --- P
     end
 
-    P -->|USB Serial| PI[Raspberry Pi]
+    P -->|USB Serial| PI["Raspberry Pi"]
     PI -->|MQTT| MQ[(Mosquitto)]
-    MQ --> BE[Spring Boot]
-    BE --> FE[Web UI]
+    MQ --> BE["Spring Boot"]
+    BE --> FE["Web UI"]
 ```
 
 ## 2) MVP vs Future
