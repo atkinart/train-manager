@@ -1,27 +1,23 @@
-# Arduino firmware skeleton
+# Arduino firmware skeleton (Legacy / Alternative)
 
-Целевая архитектура: Arduino node публикует события в MQTT и получает команды.
+Этот раздел сохранён как исторический и совместимый путь, но **не является primary платформой проекта**.
 
-## Два варианта связи
+## Текущий статус
 
-- **Вариант A (целевой):** Arduino напрямую MQTT (Wi-Fi/Ethernet shield).
-- **Вариант B (упрощённый старт):** Arduino -> Serial -> bridge (на Raspberry Pi), а bridge уже MQTT.
+- Основная платформа узла: **Raspberry Pi Pico 2 W / Pico 2 WH**.
+- Основной firmware path: `firmware/pico2w/`.
+- Этот `arduino/` каталог оставлен для:
+  - существующих Arduino макетов;
+  - сравнения подходов;
+  - миграции старых экспериментов.
 
-В этом репо зафиксирована **целевая MQTT-модель**, но для первых шагов допускается Variant B.
+## Если вы начинаете с нуля
 
-## Папки
-- `node_mvp/src/node_mvp.ino` — основной скетч-каркас.
+Используйте Pico-centric путь:
+1. `docs/wiring-guide.md`
+2. `docs/power-design.md`
+3. `firmware/pico2w/README.md`
 
-## Что уже заложено
-- pin config;
-- abstraction для reader и servo switch;
-- anti-duplicate RFID reads;
-- heartbeat заготовка;
-- command handler заготовка.
+## Что здесь лежит
 
-## Прошивка
-1. Установить Arduino IDE.
-2. Добавить библиотеки: `MFRC522`, `Servo`, MQTT lib (зависит от выбранной сетевой библиотеки).
-3. Открыть `node_mvp/src/node_mvp.ino`.
-4. Заполнить Wi-Fi/MQTT параметры.
-5. Загрузить на плату и смотреть Serial Monitor.
+- `node_mvp/src/node_mvp.ino` — ранний Arduino sketch-каркас (legacy).

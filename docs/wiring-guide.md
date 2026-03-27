@@ -1,61 +1,74 @@
-# Wiring Guide (практический)
+# Wiring Guide (Pico 2 W, практический)
 
 ## 1. Правила безопасности перед включением
 
 1. **Сначала питание отключено**, потом собираем схему.
 2. Проверяем полярность 5V/GND дважды.
-3. **Общая земля обязательна**: GND Arduino, GND внешнего 5V БП и GND servo должны быть вместе.
-4. MFRC522 работает от **3.3V**, не от 5V.
+3. **Common ground обязателен**: GND Pico, GND внешнего 5V БП и GND servo должны быть вместе.
+4. Pico GPIO — только **3.3V logic** (5V на GPIO запрещены).
+5. MFRC522 питается от **3.3V**, не от 5V.
 
-## 2. Подключение MFRC522 к Arduino (SPI)
+## 2. Pin mapping MVP (рекомендуемый)
 
-Пример для Arduino Uno/Nano:
-- SDA(SS) -> D10
-- SCK -> D13
-- MOSI -> D11
-- MISO -> D12
-- RST -> D9
-- 3.3V -> 3.3V
-- GND -> GND
+### Pico 2 W ↔ MFRC522 (SPI)
 
-> Не подавайте 5V на питание MFRC522.
+| MFRC522 pin | Pico pin | Комментарий |
+|---|---|---|
+| SDA / SS | GP5 | SPI chip select |
+| SCK | GP2 | SPI clock |
+| MOSI | GP3 | SPI TX |
+| MISO | GP4 | SPI RX |
+| RST | GP6 | reset line |
+| 3.3V | 3V3(OUT) | питание модуля |
+| GND | GND | общая земля |
 
-## 3. Подключение servo
+### Pico 2 W ↔ Servo
 
-- Servo signal -> D5 (пример)
-- Servo VCC -> внешний 5V БП
-- Servo GND -> GND внешнего БП
-- Arduino GND -> общий GND (соединить с GND внешнего БП)
+| Servo | Pico pin | Питание |
+|---|---|---|
+| Servo #1 signal | GP14 (PWM) | servo VCC от внешнего 5V PSU |
+| Servo #2 signal | GP15 (PWM) | servo VCC от внешнего 5V PSU |
+| Servo GND | COMMON GND | обязательно объединить с GND Pico |
 
-Рекомендуется поставить конденсатор 470-1000µF между 5V и GND рядом с servo.
+### Pico 2 W ↔ Raspberry Pi
 
-## 4. Базовая MVP схема
+| Соединение | Назначение |
+|---|---|
+| USB data cable | MVP transport: USB Serial |
+
+## 3. Базовая MVP схема
 
 ```mermaid
 flowchart LR
-  PSU[5V Power Supply] -->|5V| SERVO[Servo]
-  PSU -->|5V optional| ARD[Arduino]
-  ARD -->|3.3V| RFID[MFRC522]
-  ARD -->|Signal D5| SERVO
-  ARD <-- SPI --> RFID
-  PSU --- GND[(Common GND)]
-  ARD --- GND
-  SERVO --- GND
+  PSU[External 5V Servo PSU] -->|5V| S1[Servo #1]
+  PSU -->|5V| S2[Servo #2]
+
+  PICO[Pico 2 W / 2 WH] -->|PWM GP14| S1
+  PICO -->|PWM GP15| S2
+  PICO <-->|SPI GP2/3/4/5 + GP6 RST| RFID[MFRC522 3.3V]
+
+  PICO <-->|USB Serial| RPI[Raspberry Pi]
+
+  PSU --- GND[(COMMON GND)]
+  PICO --- GND
+  S1 --- GND
+  S2 --- GND
   RFID --- GND
 ```
 
-## 5. Что нельзя делать
+## 4. Что нельзя делать
 
-- Питать несколько servo от пина 5V Arduino.
-- Подключать MFRC522 к 5V питанию.
+- Подавать 5V сигнал на любой GPIO Pico.
+- Питать servo от 3.3V Pico или от USB линии Pico.
+- Подключать 5V UART/TTL устройство к Pico без level shifting.
 - Запускать полную интеграцию без smoke-test каждого блока.
-- Игнорировать симптомы: reset Arduino, дрожание servo, random RFID reads.
 
-## 6. Типичные ошибки
+## 5. Типичные ошибки
 
 | Симптом | Вероятная причина | Что делать |
 |---|---|---|
-| Arduino перезагружается при повороте стрелки | просадка питания | отдельный 5V БП, общий GND, конденсатор |
+| Pico перезагружается при повороте стрелки | просадка питания servo | отдельный 5V БП, common GND, конденсатор |
 | RFID не видит карты | неверный SPI pin mapping | сверить SDA/SCK/MISO/MOSI/RST |
 | RFID нестабилен | шумное питание/длинные провода | укоротить провода, улучшить GND |
-| Servo дрожит | плохое питание/шум сигнала | отдельное питание, проверить пин и механическую нагрузку |
+| Servo дрожит | плохое питание/шум сигнала | отдельное питание, проверить механику и PWM pin |
+| Нет связи с Raspberry Pi | кабель только для зарядки | заменить на USB data cable |

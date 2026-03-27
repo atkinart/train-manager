@@ -10,6 +10,13 @@
 - команды к node: `brio/v1/nodes/{nodeId}/commands/...`
 - backend/system: `brio/v1/system/...`
 
+## MVP transport clarification
+
+- В MVP Pico 2 W не обязан говорить с MQTT напрямую.
+- Pico 2 W общается с Raspberry Pi по USB Serial.
+- Serial bridge на Raspberry Pi конвертирует Serial сообщения Pico в MQTT topics ниже.
+- Поэтому topic contract уже финальный, даже если transport в MVP гибридный.
+
 ## Topic tree
 
 - `brio/v1/nodes/{nodeId}/heartbeat`
@@ -24,8 +31,8 @@
 - heartbeat: QoS 1, retained=false
 - rfid events: QoS 1, retained=false
 - commands: QoS 1, retained=false
-- switch state: QoS 1, retained=true (последнее состояние полезно новым подписчикам)
-- LWT: `brio/v1/nodes/{nodeId}/status` payload `OFFLINE`
+- switch state: QoS 1, retained=true
+- LWT (future Wi‑Fi mode): `brio/v1/nodes/{nodeId}/status` payload `OFFLINE`
 
 ## Примеры payload JSON
 
@@ -34,6 +41,7 @@
 {
   "nodeId": "node-1",
   "status": "ONLINE",
+  "transport": "USB_SERIAL",
   "uptimeSec": 1234,
   "ts": "2026-03-27T12:00:00Z"
 }
@@ -76,8 +84,16 @@
 
 ```mermaid
 flowchart LR
-  Node[Arduino Node] -->|events/heartbeat/state| Broker[(Mosquitto)]
+  Pico[Pico 2 W Node] <-->|USB Serial| Bridge[Serial Bridge on Raspberry Pi]
+  Bridge -->|events/heartbeat/state| Broker[(Mosquitto)]
   Backend[Spring Backend] -->|commands| Broker
   Broker --> Backend
-  Broker --> Node
+  Broker --> Bridge
 ```
+
+## Future mode (direct Wi‑Fi MQTT)
+
+При переходе на Wi‑Fi MQTT direct:
+- topic tree не меняется;
+- payload format не меняется;
+- serial bridge больше не нужен для этого node.

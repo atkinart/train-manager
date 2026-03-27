@@ -7,7 +7,7 @@
 - **Reader**: физический RFID reader на узле.
 - **Switch**: стрелка с состояниями `STRAIGHT | DIVERGE`.
 - **BlockSection**: участок пути для future occupancy.
-- **Node**: Arduino контроллер с набором readers/switches.
+- **Node**: Pico 2 W/WH контроллер с набором readers/switches.
 
 ## Идентификаторы
 
@@ -22,6 +22,12 @@
 - Один `Train` имеет один текущий `tagUid`.
 - `Reader` генерирует события проезда для `Train`.
 - `Switch` получает команды и публикует состояние.
+
+## MVP transport field
+
+Для node полезно хранить поле `transportMode`:
+- `USB_SERIAL` (MVP default);
+- `WIFI_MQTT_DIRECT` (future).
 
 ## Mermaid ER
 

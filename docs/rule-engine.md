@@ -4,6 +4,8 @@
 
 Преобразовать входные события в команды управления стрелками.
 
+Rule Engine не зависит от того, как node подключён (USB Serial bridge или direct Wi‑Fi MQTT).
+
 ## Модель правила (JSON DSL)
 
 ```json
@@ -33,7 +35,7 @@
 2. Проверка условий (`readerId`, `tagUid`, future: block occupancy).
 3. Сортировка по `priority`.
 4. Применение `cooldownMs`.
-5. Публикация команд в MQTT.
+5. Публикация команд в MQTT (`brio/v1/nodes/{nodeId}/commands/switch.set`).
 
 ## Базовое правило MVP
 
@@ -44,3 +46,4 @@
 - Поддержка цепочек условий (`AND/OR`).
 - Поддержка временных окон и состояния участков.
 - Конфликт-резолвер для нескольких правил на одну стрелку.
+- Rule simulation mode перед записью в production ruleset.
