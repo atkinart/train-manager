@@ -1,51 +1,51 @@
-# Implementation Plan
+# Implementation plan (Pico 2 W primary)
 
-## Этап 0: Подготовка (1-2 дня)
-- Сформировать BOM и заказать компоненты.
-- Поднять локальную инфраструктуру (mosquitto/backend/frontend).
-- Зафиксировать ID-схему node/reader/switch/tag.
+## Phase 1 — MVP node bring-up
 
-**Готовность:** инфраструктура поднимается, документы согласованы.
+1. Собрать hardware:
+   - Pico 2 W/WH,
+   - 1x MFRC522,
+   - 2x servo,
+   - external 5V PSU для servo,
+   - USB кабель Pico ↔ Raspberry Pi.
+2. Проверить питание и COMMON GND.
+3. Прошить firmware skeleton из `firmware/pico2w/`.
+4. Проверить serial heartbeat.
+5. Проверить RFID event и anti-duplicate окно.
+6. Проверить команды на servo через serial/MQTT bridge.
 
-## Этап 1: MVP hardware smoke (3-5 дней)
-- Подключить 1 Arduino + 1 MFRC522 + 1 servo.
-- Проверить отдельные скетчи reader и servo.
-- Включить heartbeat в MQTT.
+## Phase 2 — Hub integration
 
-**Готовность:** стабильный heartbeat, читается UID, servo двигается по локальной команде.
+1. Поднять Mosquitto на Raspberry Pi.
+2. Запустить bridge process:
+   - вход: USB serial от Pico,
+   - выход: MQTT events/heartbeat/state,
+   - вход: MQTT command,
+   - выход: serial command.
+3. Интегрировать backend и UI.
 
-## Этап 2: MVP integration (5-7 дней)
-- Публикация `rfid.detected` в MQTT.
-- Backend получает событие и применяет базовое правило.
-- Backend отправляет `switch.command`, node подтверждает `switch.state`.
-- UI показывает онлайн-статус и event log.
+## Phase 3 — Reliability
 
-**Готовность:** end-to-end сценарий на 1 reader + 1 switch.
+- watchdog/таймауты,
+- retry и idempotency команд,
+- улучшение диагностики.
 
-## Этап 3: Целевой MVP (1-2 недели)
-- Добавить вторую стрелку.
-- Добавить device registry и layout модель.
-- Ручное переключение стрелок из UI.
-- Базовые интеграционные тесты backend.
+## Phase 4 — Future expansion
 
-**Готовность:** 2 стрелки управляются автоматически и вручную.
+- Wi‑Fi MQTT direct mode для Pico 2 W,
+- PCA9685 для 4+ servo,
+- multi-node orchestration,
+- расширенный rule engine.
 
-## Этап 4: Расширение
-- 3+ node, 10+ switches.
-- История событий в БД.
-- Rule DSL редактор и валидация.
-- Светофоры/шлагбаумы.
+## Development mode choices
 
-## Риски и меры
+### MVP recommended
 
-| Риск | Влияние | Мера |
-|---|---|---|
-| Просадка питания servo | хаотичная работа/ресеты | отдельный 5V БП, общая земля |
-| Шум на RFID | ложные срабатывания | anti-duplicate окно + фильтры |
-| Потеря MQTT связи | пропуск команд | heartbeat + last will + retry |
-| Сложность правил | трудная поддержка | JSON DSL + тестовые сценарии |
+- Arduino IDE + Arduino-Pico core
+- Быстрый старт для новичка
+- Минимальная сложность toolchain
 
-## Критерии готовности MVP
-- End-to-end latency < 500 ms в локальной сети (целевая).
-- Не менее 30 минут непрерывной работы без reset node.
-- 0 ложных переключений на тестовой трассе 20 циклов.
+### Future mature option
+
+- Official Pico C/C++ SDK
+- Более строгий контроль low-level логики и производительности

@@ -1,83 +1,70 @@
-# MQTT Topics
+# MQTT topics
 
-## Naming convention
+## Namespace
 
-Префикс: `brio/v1`
+Используем префикс:
+- `brio/`
 
-Формат:
-- события от node: `brio/v1/nodes/{nodeId}/events/...`
-- state от node: `brio/v1/nodes/{nodeId}/state/...`
-- команды к node: `brio/v1/nodes/{nodeId}/commands/...`
-- backend/system: `brio/v1/system/...`
+Node id пример:
+- `node-01`
 
-## Topic tree
+## Topics (MVP)
 
-- `brio/v1/nodes/{nodeId}/heartbeat`
-- `brio/v1/nodes/{nodeId}/events/rfid.detected`
-- `brio/v1/nodes/{nodeId}/commands/switch.set`
-- `brio/v1/nodes/{nodeId}/state/switch`
-- `brio/v1/system/layout/state`
-- `brio/v1/system/events`
+- `brio/node/node-01/heartbeat`
+- `brio/node/node-01/event/rfid`
+- `brio/node/node-01/state/switch/1`
+- `brio/node/node-01/state/switch/2`
+- `brio/node/node-01/cmd/switch/1`
+- `brio/node/node-01/cmd/switch/2`
 
-## QoS / retained / LWT
+## Payload examples
 
-- heartbeat: QoS 1, retained=false
-- rfid events: QoS 1, retained=false
-- commands: QoS 1, retained=false
-- switch state: QoS 1, retained=true (последнее состояние полезно новым подписчикам)
-- LWT: `brio/v1/nodes/{nodeId}/status` payload `OFFLINE`
+### heartbeat
 
-## Примеры payload JSON
-
-### Heartbeat
 ```json
 {
-  "nodeId": "node-1",
-  "status": "ONLINE",
-  "uptimeSec": 1234,
-  "ts": "2026-03-27T12:00:00Z"
+  "nodeId": "node-01",
+  "ts": 1710000000,
+  "uptimeMs": 123456,
+  "transport": "usb-serial",
+  "fw": "pico2w-mvp-0.1"
 }
 ```
 
 ### RFID event
+
 ```json
 {
-  "eventId": "evt-001",
-  "nodeId": "node-1",
-  "readerId": "reader-a",
-  "tagUid": "04AABBCCDD",
-  "ts": "2026-03-27T12:00:01Z"
+  "nodeId": "node-01",
+  "readerId": "reader-1",
+  "uid": "04A1B2C3",
+  "ts": 1710000001
 }
 ```
 
-### Switch command
+### switch command
+
 ```json
 {
-  "commandId": "cmd-001",
-  "switchId": "sw-1",
-  "targetState": "DIVERGE",
-  "reason": "rule:route-a",
-  "ts": "2026-03-27T12:00:01Z"
+  "cmdId": "cmd-1001",
+  "position": "STRAIGHT"
 }
 ```
 
-### Switch state ack
-```json
-{
-  "nodeId": "node-1",
-  "switchId": "sw-1",
-  "state": "DIVERGE",
-  "source": "COMMAND",
-  "ts": "2026-03-27T12:00:02Z"
-}
-```
-
-## MQTT interaction diagram
+## Data flow
 
 ```mermaid
 flowchart LR
-  Node[Arduino Node] -->|events/heartbeat/state| Broker[(Mosquitto)]
-  Backend[Spring Backend] -->|commands| Broker
-  Broker --> Backend
-  Broker --> Node
+  P[Pico 2 W\nUSB Serial] --> B[Bridge on Raspberry Pi]
+  B --> M[(Mosquitto)]
+  M --> S[Spring Boot]
+  S --> U[Web UI]
+  U --> S
+  S --> M
+  M --> B
+  B --> P
 ```
+
+## Future mode
+
+В future mode Pico 2 W может публиковать/подписываться в MQTT напрямую по Wi‑Fi, но topic schema сохраняется.
