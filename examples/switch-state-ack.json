@@ -1,0 +1,7 @@
+{
+  "nodeId": "node-1",
+  "switchId": "sw-1",
+  "state": "DIVERGE",
+  "source": "COMMAND",
+  "ts": "2026-03-27T12:01:11Z"
+}
