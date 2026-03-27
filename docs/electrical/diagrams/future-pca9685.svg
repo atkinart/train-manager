@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#f8fafc"/>
+  <text x="40" y="55" font-size="34" font-family="Arial" font-weight="700">Future expansion: Arduino + PCA9685 + many Servo</text>
+
+  <rect x="80" y="160" width="420" height="240" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="110" y="210" font-size="30" font-family="Arial" font-weight="700">Arduino UNO R4</text>
+  <text x="110" y="255" font-size="24" font-family="Arial">I2C: SDA/SCL</text>
+  <text x="110" y="290" font-size="24" font-family="Arial">Control logic only</text>
+
+  <rect x="620" y="160" width="420" height="270" fill="#dcfce7" stroke="#15803d" stroke-width="3"/>
+  <text x="650" y="210" font-size="30" font-family="Arial" font-weight="700">PCA9685</text>
+  <text x="650" y="255" font-size="24" font-family="Arial">I2C from Arduino</text>
+  <text x="650" y="290" font-size="24" font-family="Arial">16x servo signal channels</text>
+  <text x="650" y="325" font-size="24" font-family="Arial">VCC (logic) + V+ (servo power)</text>
+
+  <rect x="1160" y="160" width="360" height="190" fill="#fef9c3" stroke="#a16207" stroke-width="3"/>
+  <text x="1190" y="210" font-size="30" font-family="Arial" font-weight="700">External 5V PSU</text>
+  <text x="1190" y="255" font-size="24" font-family="Arial">POWER 5V for servo rail</text>
+
+  <rect x="620" y="520" width="900" height="220" fill="#ffedd5" stroke="#c2410c" stroke-width="3"/>
+  <text x="650" y="570" font-size="30" font-family="Arial" font-weight="700">Servo bank: CH0 ... CH15</text>
+  <text x="650" y="610" font-size="24" font-family="Arial">servo signal from PCA9685 channels</text>
+  <text x="650" y="645" font-size="24" font-family="Arial">POWER 5V from external PSU</text>
+
+  <line x1="500" y1="240" x2="620" y2="240" stroke="#0f766e" stroke-width="6"/>
+  <text x="520" y="220" font-size="20" font-family="Arial" font-weight="700">I2C BUS</text>
+
+  <line x1="1040" y1="255" x2="1160" y2="255" stroke="#dc2626" stroke-width="6"/>
+  <text x="1055" y="235" font-size="20" font-family="Arial" font-weight="700">POWER 5V</text>
+
+  <line x1="830" y1="430" x2="830" y2="520" stroke="#2563eb" stroke-width="6"/>
+  <text x="845" y="485" font-size="20" font-family="Arial" font-weight="700">servo signal</text>
+
+  <line x1="1330" y1="350" x2="1330" y2="520" stroke="#dc2626" stroke-width="6"/>
+  <text x="1345" y="455" font-size="20" font-family="Arial">POWER 5V</text>
+
+  <line x1="300" y1="400" x2="300" y2="820" stroke="#111827" stroke-width="6"/>
+  <line x1="830" y1="430" x2="830" y2="820" stroke="#111827" stroke-width="6"/>
+  <line x1="1330" y1="350" x2="1330" y2="820" stroke="#111827" stroke-width="6"/>
+  <line x1="300" y1="820" x2="1480" y2="820" stroke="#111827" stroke-width="6"/>
+  <text x="700" y="805" font-size="28" font-family="Arial" font-weight="700">COMMON GND</text>
+
+  <text x="40" y="865" font-size="24" font-family="Arial" fill="#b91c1c" font-weight="700">WARNING: servo power must stay external even with PCA9685.</text>
+</svg>
